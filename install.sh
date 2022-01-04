@@ -124,7 +124,7 @@ else
   sudo sed -i "s/export USE_WSLG_SOCKET=.*/export USE_WSLG_SOCKET=${use_wslg_socket}/" /etc/bash.bashrc
 fi
 
-
+cat "$self_dir/.bashrc" >> ~/.bashrc
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] && [ "$(head -n1  /proc/sys/fs/binfmt_misc/WSLInterop)" == "enabled" ]; then
   "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u
