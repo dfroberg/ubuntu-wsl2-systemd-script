@@ -1,3 +1,4 @@
+# load enviroment for PATH so WSL2 would find Windows programs again.
 if [ -f ~/.systemd-env ]; then
     . ~/.systemd-env
 fi
