@@ -119,7 +119,7 @@ sudo rm -f /lib/systemd/system/systemd-networkd.service
 sudo rm -f /lib/systemd/system/systemd-networkd.socket
 
 if ! grep 'start-systemd-namespace' /etc/bash.bashrc >/dev/null; then
-  sudo sed -i 2a"# Start or enter a PID namespace in WSL2\nexport USE_WSLG_SOCKET=${use_wslg_socket}\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
+  sudo sed -i 8a"# Start or enter a PID namespace in WSL2\nexport USE_WSLG_SOCKET=${use_wslg_socket}\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
 else
   sudo sed -i "s/export USE_WSLG_SOCKET=.*/export USE_WSLG_SOCKET=${use_wslg_socket}/" /etc/bash.bashrc
 fi
