@@ -4,8 +4,7 @@ set -ex
 force_install=false
 use_wslg_socket=true
 
-while [[ $# -gt 0 ]] && [[ "$1" == "--"* ]] ;
-do
+while [[ $# -gt 0 ]] && [[ "$1" == "--"* ]]; do
     opt="$1";
     shift;              #expose next argument
     case "$opt" in
@@ -19,7 +18,7 @@ do
         "--no-wslg="* )
            use_wslg_socket="${opt#*=}";;
         *) echo >&2 "Invalid option: $@"; exit 1;;
-   esac
+    esac
 done
 
 if [ "${force_install}" == "false" ]; then
@@ -38,50 +37,50 @@ fi
 self_dir="$(pwd)"
 
 function interop_prefix {
-  win_location="/mnt/"
-  if [ -f /etc/wsl.conf ]; then
-    tmp="$(awk -F '=' '/root/ {print $2}' /etc/wsl.conf | awk '{$1=$1;print}')"
-    [ "$tmp" == "" ] || win_location="$tmp"
-    unset tmp
-  fi
-  echo "$win_location"
+    win_location="/mnt/"
+    if [ -f /etc/wsl.conf ]; then
+        tmp="$(awk -F '=' '/root/ {print $2}' /etc/wsl.conf | awk '{$1=$1;print}')"
+        [ "$tmp" == "" ] || win_location="$tmp"
+        unset tmp
+    fi
+    echo "$win_location"
 
-  unset win_location
+    unset win_location
 }
 
 function sysdrive_prefix {
-  win_location="$(interop_prefix)"
-  hard_reset=0
-  for pt in $(ls "$win_location"); do
-    if [ $(echo "$pt" | wc -l) -eq 1 ]; then
-      if [ -d "$win_location$pt/Windows/System32" ]; then
-        hard_reset=1
-        win_location="$pt"
-        break
-      fi
-    fi 
-  done
+    win_location="$(interop_prefix)"
+    hard_reset=0
+    for pt in $(ls "$win_location"); do
+        if [ $(echo "$pt" | wc -l) -eq 1 ]; then
+            if [ -d "$win_location$pt/Windows/System32" ]; then
+                hard_reset=1
+                win_location="$pt"
+                break
+            fi
+        fi
+    done
 
-  if [ $hard_reset -eq 0 ]; then
-    win_location="c"
-  fi
+    if [ $hard_reset -eq 0 ]; then
+        win_location="c"
+    fi
 
-  echo "$win_location"
+    echo "$win_location"
 
-  unset win_location
-  unset hard_reset
+    unset win_location
+    unset hard_reset
 }
 
 sudo hwclock -s
 install_packages=""
 for package in daemonize dbus-user-session fontconfig; do
-  if [ $(dpkg -l ${package} &> /dev/null; echo $?) -ne 0 ]; then
-    install_packages+="${package} "
-  fi
+    if [ $(dpkg -l ${package} &> /dev/null; echo $?) -ne 0 ]; then
+        install_packages+="${package} "
+    fi
 done
 
 if [ ${#install_packages} -gt 0 ]; then
-  sudo apt-get update && sudo apt-get install -yqq ${install_packages}
+    sudo apt-get update && sudo apt-get install -yqq ${install_packages}
 fi
 
 sudo cp "$self_dir/start-systemd-namespace" /usr/sbin/start-systemd-namespace
@@ -119,21 +118,21 @@ sudo rm -f /lib/systemd/system/systemd-networkd.service
 sudo rm -f /lib/systemd/system/systemd-networkd.socket
 
 if ! grep 'start-systemd-namespace' /etc/bash.bashrc >/dev/null; then
-  sudo sed -i 8a"# Start or enter a PID namespace in WSL2\nexport USE_WSLG_SOCKET=${use_wslg_socket}\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
+    sudo sed -i 8a"# Start or enter a PID namespace in WSL2\nexport USE_WSLG_SOCKET=${use_wslg_socket}\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
 else
-  sudo sed -i "s/export USE_WSLG_SOCKET=.*/export USE_WSLG_SOCKET=${use_wslg_socket}/" /etc/bash.bashrc
+    sudo sed -i "s/export USE_WSLG_SOCKET=.*/export USE_WSLG_SOCKET=${use_wslg_socket}/" /etc/bash.bashrc
 fi
 
 cat "$self_dir/.bashrc" >> ~/.bashrc
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] && [ "$(head -n1  /proc/sys/fs/binfmt_misc/WSLInterop)" == "enabled" ]; then
-  "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u
-  "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx BASH_ENV /etc/bash.bashrc
+    "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u
+    "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx BASH_ENV /etc/bash.bashrc
 else
-  echo
-  echo "You need to manually run the following two commands in Windows' cmd.exe:"
-  echo
-  echo "  setx WSLENV BASH_ENV/u"
-  echo "  setx BASH_ENV /etc/bash.bashrc"
-  echo
+    echo
+    echo "You need to manually run the following two commands in Windows' cmd.exe:"
+    echo
+    echo "  setx WSLENV BASH_ENV/u"
+    echo "  setx BASH_ENV /etc/bash.bashrc"
+    echo
 fi
