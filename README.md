@@ -7,12 +7,9 @@ From [the snapcraft forum](https://forum.snapcraft.io/t/running-snaps-on-wsl2-in
 Thanks to [Daniel](https://forum.snapcraft.io/u/daniel) on the Snapcraft forum!
 Also big thanks to [Smg](https://github.com/FiestaLake) and others for many fixes! 
 
-## Warning
+## Disclaimer
 ```sh
-I am not responsible for broken installations, 
-fights with your roommates and police ringing your door.
-YOU are choosing to make these modifications, and if
-you point the finger at me for messing up your device, I will laugh at you.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ## Usage
